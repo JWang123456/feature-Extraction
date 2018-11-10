@@ -33,11 +33,12 @@ B = np.matrix('1 0 0; 0 3 0; 0 0 2')
 A = np.matrix('1 1 1; 1 1 1; 1 1 1') 
 C = np.dot(np.linalg.pinv(B), A)
 print("C=", C)
+
 # evals,evecs = np.linalg.eigh(C); this is wrong because C is not symmetric
 evals,evecs = np.linalg.eig(C) # eigenvalues may be complex. Assume real
 evals,evecs = np.linalg.eig(C)
 print("evals=", evals, " evecs=", evecs)
- # eigenvalues may be complex. Assume real, and sort them.
+# eigenvalues may be complex. Assume real, and sort them.
 
 idx = np.argsort(evals)[::-1]
 evals = evals[idx]

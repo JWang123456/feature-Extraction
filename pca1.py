@@ -18,18 +18,47 @@ first = sys.argv[1]
 second = sys.argv[2]
 
 DATA = np.genfromtxt(first, delimiter=',', autostrip=True) # strip spaces
-print("DATA=", DATA)
 
 LABLE = np.genfromtxt(second, delimiter=',', autostrip=True) # strip spaces
-print("LABLE=", LABLE)
+# print("LABLE=", LABLE)
 
+
+# computing SVD
+# C = U S Vt
+U,s,Vt = np.linalg.svd(DATA)
+# print("U=", U, "\n s=", s, "\n Vt=",Vt)
+print("Vt=",Vt)
+
+# matrix inverse and pseudo inverse
+A_inv = np.linalg.inv(Vt)
+# print("A_inv=", A_inv, "\nA_pinv=",A_pinv)
+
+
+# extract the 2 dominant eigenvectors
+r = 2
+V_r = A_inv[:r,:]; print("V_r=",V_r) # get first r eigenvectors
+
+DATA_inv = np.linalg.pinv(DATA)
+# print(DATA_inv)
+
+def matrixmult (A, B):
+    C = [[0 for row in range(len(B[0]))] for col in range(len(A))]
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                C[i][j] += A[i][k]*B[k][j]
+    return C
+
+x = matrixmult(V_r,DATA_inv)
+
+res = np.linalg.pinv(x)
 
 Vt = np.matrix('1 0 0 0 0 0; 0 1 0 0 0 0')
 D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 
 # save output in comma separated filename.txt. filename depends on the program
-np.savetxt('reduced-a.txt', D, delimiter=',')
-np.savetxt('V-a.txt', Vt, delimiter=',')
+np.savetxt('reduced-a.txt', res, delimiter=',')
+np.savetxt('V-a.txt', V_r, delimiter=',')
 
 
