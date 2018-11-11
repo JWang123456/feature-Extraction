@@ -39,8 +39,49 @@ def matrixavg (A):
 avg = matrixavg(DATA)
 print(avg)
 Y = matrixsubtract (DATA, avg)
-print(Y) 
 
+# Example: computing the covariance matrix of X
+# mu = np.mean(X, axis=1)
+# Xc = X - mu;  print("Xc=",Xc)
+# C = Xc*Xc.T;  print("C=",C)
+
+Y_inv = np.linalg.pinv(Y)
+
+def matrixmult (A, B):
+    C = [[0 for row in range(len(B[0]))] for col in range(len(A))]
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                C[i][j] += A[i][k]*B[k][j]
+    return C
+
+M = matrixmult(Y_inv, Y)
+
+def matrixdiv (M):
+    for i in range(len(M)):
+        for j in range(len(M[0])):
+            M[i][j] = M[i][j]/len(Y)
+    return M
+
+C = matrixdiv(M)
+
+evals,evecs = np.linalg.eigh(C) 
+# print("evals=", evals, "\n" " evecs=", evecs)
+
+idx = np.argsort(evals)[::-1] # sort in reverse order
+evals = evals[idx]
+evecs = evecs[:,idx]
+# print("evals=", evals, "\n" "\n" " evecs=", evecs) # evectors are the cols of evecs
+
+
+# extract the 2 dominant eigenvectors
+r = 2
+V_r = evecs[:r,:]; print("V_r=",V_r) # get first r eigenvectors
+
+x = matrixmult(V_r,Y_inv)
+
+res = np.linalg.pinv(x)
+# print(C)
 # # computing SVD
 # # C = U S Vt
 # U,s,Vt = np.linalg.svd(DATA)
@@ -82,7 +123,8 @@ print(Y)
 # D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 
 # # save output in comma separated filename.txt. filename depends on the program
-# np.savetxt('reduced-a.txt', res, delimiter=',')
-# np.savetxt('V-a.txt', V_r, delimiter=',')
+np.savetxt('reduced-b.txt', res, delimiter=',')
+np.savetxt('V-b.txt', V_r, delimiter=',')
+
 
 
