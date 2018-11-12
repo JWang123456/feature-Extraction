@@ -3,6 +3,7 @@
 # one output arguments, output_file
 # reduced_file is a matrix of size nx2. Vector_file is a matrix of 2xm. 
 # labels_file is an array of size n.The labels are 1,2,3
+
 # queried_point is an 1xm. label is an integer.
 # If lable is -1, it means finding the result for reducedim1.py.
 # Otherwise, it means finding the result for reducedim2.py.
