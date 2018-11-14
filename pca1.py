@@ -6,8 +6,8 @@
 import sys
 import numpy as np
 
-if len(sys.argv) != 3 :
-    print('usage : ', sys.argv[0], 'data_file labels_file ')
+if len(sys.argv) != 5 :
+    print('usage : ', sys.argv[0], 'data_file labels_file pca_iris_vec.csv pca_iris_reduced_data.csv')
     sys.exit()
 
 # read the files for the matrices Xt and y. Xt is nxm, y is nx1
@@ -58,7 +58,7 @@ D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 
 # save output in comma separated filename.txt. filename depends on the program
-np.savetxt('reduced-a.txt', res, delimiter=',')
-np.savetxt('V-a.txt', V_r, delimiter=',')
+np.savetxt(sys.argv[4], res, delimiter=',')
+np.savetxt(sys.argv[3], V_r, delimiter=',')
 
 

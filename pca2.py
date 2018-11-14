@@ -6,20 +6,20 @@
 import sys
 import numpy as np
 
-if len(sys.argv) != 3 :
-    print('usage : ', sys.argv[0], 'data_file labels_file ')
+if len(sys.argv) != 5 :
+    print('usage : ', sys.argv[0], 'data_file labels_file pca_iris_vec.csv pca_iris_reduced_data.csv')
     sys.exit()
 
 # read the files for the matrices Xt and y. Xt is nxm, y is nx1
 # use these to calculate two vectors v1, v2 each of size m
-# Compute the projections of Xt on v1,v2 for the matrix D of size nx2
+# Compute the projections of Xt xon v1,v2 for the matrix D of size nx2
 
 first = sys.argv[1]
-second = sys.argv[2]
+#second = sys.argv[2]
 
 DATA = np.genfromtxt(first, delimiter=',', autostrip=True) # strip spaces
 
-LABLE = np.genfromtxt(second, delimiter=',', autostrip=True) # strip spaces
+#LABLE = np.genfromtxt(second, delimiter=',', autostrip=True) # strip spaces
 # print("LABLE=", LABLE)
 
 def matrixsubtract (A, b):
@@ -81,6 +81,24 @@ V_r = evecs[:r,:]; print("V_r=",V_r) # get first r eigenvectors
 x = matrixmult(V_r,Y_inv)
 
 res = np.linalg.pinv(x)
+
+# # save output in comma separated filename.txt. filename depends on the program
+np.savetxt(sys.argv[4], res, delimiter=',')
+np.savetxt(sys.argv[3], V_r, delimiter=',')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # print(C)
 # # computing SVD
 # # C = U S Vt
@@ -121,10 +139,3 @@ res = np.linalg.pinv(x)
 # Vt = np.matrix('1 0 0 0 0 0; 0 1 0 0 0 0')
 # D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 # D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
-
-# # save output in comma separated filename.txt. filename depends on the program
-np.savetxt('reduced-b.txt', res, delimiter=',')
-np.savetxt('V-b.txt', V_r, delimiter=',')
-
-
-

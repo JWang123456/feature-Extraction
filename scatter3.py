@@ -74,8 +74,8 @@ V_r = e[:,:r]
 
 D = np.dot(X, V_r)
 
-np.savetxt (argv[4], V_r, delimiter =',')
-np.savetxt (argv[5], D, delimiter =',')
+np.savetxt (sys.argv[3], V_r, delimiter =',')
+np.savetxt (sys.argv[4], D, delimiter =',')
 
 #vec = np.dot(np.dot(evecs,V_inv),V_r)
 #print("max_ratio_vector is:", vec)

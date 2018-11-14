@@ -65,8 +65,8 @@ V_r = evecs[: ,:r]
 
 D = np.dot(X, V_r)
 
-np.savetxt (argv[4], V_r, delimiter =',')
-np.savetxt (argv[5], D, delimiter =',')
+np.savetxt (sys.argv[3], V_r, delimiter =',')
+np.savetxt (sys.argv[4], D, delimiter =',')
 
 #min_W = np.dot(np.dot(V_r.T, S),V_r)
 
