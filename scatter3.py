@@ -2,8 +2,8 @@
 import numpy as np
 import sys
 
-if len(sys.argv) != 3:
-    print("usage:", sys.argv[0], "data_file labels_file")
+if len(sys.argv) != 5:
+    print('usage:', sys.argv[0],'data_file label_file scatter1_iris_vec.csv scatter1_iris_reduced_data.csv')
     sys.exit()
 
 X = np.genfromtxt(sys.argv[1], delimiter = ',', autostrip = True)
@@ -73,7 +73,9 @@ r = 2
 V_r = e[:,:r]
 
 D = np.dot(X, V_r)
-np.savetxt ('scatter3.txt', D, delimiter =',')
+
+np.savetxt (argv[4], V_r, delimiter =',')
+np.savetxt (argv[5], D, delimiter =',')
 
 #vec = np.dot(np.dot(evecs,V_inv),V_r)
 #print("max_ratio_vector is:", vec)

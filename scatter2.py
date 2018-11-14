@@ -2,8 +2,8 @@
 import numpy as np
 import sys
 
-if len(sys.argv) != 3:
-    print("usage:", sys.argv[0], "data_file labels_file")
+if len(sys.argv) != 5:
+    print('usage:', sys.argv[0],'data_file label_file scatter1_iris_vec.csv scatter1_iris_reduced_data.csv')
     sys.exit()
     
 X = np.genfromtxt(sys.argv[1], delimiter = ',', autostrip = True)
@@ -56,7 +56,10 @@ V_r = evecs[: ,:r]
 #print ("V_r=",V_r)
 
 D = np.dot(X, V_r)
-np.savetxt ('scatter2.txt', D, delimiter =',')
+
+np.savetxt (argv[4], V_r, delimiter =',')
+np.savetxt (argv[5], D, delimiter =',')
+
 #max_B = np.dot(np.dot(V_r.T, B),V_r)
 
 #print("The maximum of between-class scatter is :", max_B)

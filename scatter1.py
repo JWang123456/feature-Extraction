@@ -2,8 +2,8 @@
 import sys
 import numpy as np
 
-if len(sys.argv) != 3:
-    print('usage:', sys.argv[0],'data_file label_file')
+if len(sys.argv) != 5:
+    print('usage:', sys.argv[0],'data_file label_file scatter1_iris_vec.csv scatter1_iris_reduced_data.csv')
     sys.exit()
 
 X = np.genfromtxt(sys.argv[1], delimiter =',', autostrip = True)
@@ -65,13 +65,25 @@ V_r = evecs[: ,:r]
 
 D = np.dot(X, V_r)
 
-np.savetxt ('scatter1.txt', D, delimiter =',')
+np.savetxt (argv[4], V_r, delimiter =',')
+np.savetxt (argv[5], D, delimiter =',')
 
 #min_W = np.dot(np.dot(V_r.T, S),V_r)
 
 #print('The minimum of within-class scatter is :', min_W)
         
-        
+#    ##The first two are the input file names, the last two are the output file names.
+
+#   python3 pca1.py iris.data iris.label pca1_iris_vec.csv pca1_iris_reduced_data.csv
+
+#   python3 scatter1.py iris.data iris.label scatter1_iris_vec.csv scatter1_iris_reduced_data.csv
+
+#   python3 reducedim1.py iris.data iris.label reducedim1_iris_vec.csv reducedim1_iris_reduced_data.csv
+
+#   ## reduced_data_file and vector_file are the outputs from reducedim1.py/reducedim2.py. nn_idx_file is the output file name.
+
+
+#   python3 nearest.py reduced_data_file vector_file labels_file queried_point_file queried_label nn_idx_file   
         
         
         
