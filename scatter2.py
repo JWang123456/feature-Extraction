@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 if len(sys.argv) != 5:
-    print('usage:', sys.argv[0],'data_file label_file scatter1_iris_vec.csv scatter1_iris_reduced_data.csv')
+    print('usage:', sys.argv[0],'data_file label_file scatter_vec.csv scatter_reduced_data.csv')
     sys.exit()
     
 X = np.genfromtxt(sys.argv[1], delimiter = ',', autostrip = True)

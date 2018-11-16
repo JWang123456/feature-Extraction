@@ -7,7 +7,7 @@ import sys
 import numpy as np
 
 if len(sys.argv) != 5 :
-    print('usage : ', sys.argv[0], 'data_file labels_file pca_iris_vec.csv pca_iris_reduced_data.csv')
+    print('usage : ', sys.argv[0], 'data_file labels_file pca_vec.csv pca_reduced_data.csv')
     sys.exit()
 
 # read the files for the matrices Xt and y. Xt is nxm, y is nx1
@@ -37,7 +37,7 @@ def matrixavg (A):
     return sum/(len(A)*len(A[0]))
 
 avg = matrixavg(DATA)
-print(avg)
+# print(avg)
 Y = matrixsubtract (DATA, avg)
 
 # Example: computing the covariance matrix of X
@@ -45,7 +45,7 @@ Y = matrixsubtract (DATA, avg)
 # Xc = X - mu;  print("Xc=",Xc)
 # C = Xc*Xc.T;  print("C=",C)
 
-Y_inv = np.linalg.pinv(Y)
+Y_tr = np.transpose(Y)
 
 def matrixmult (A, B):
     C = [[0 for row in range(len(B[0]))] for col in range(len(A))]
@@ -55,7 +55,7 @@ def matrixmult (A, B):
                 C[i][j] += A[i][k]*B[k][j]
     return C
 
-M = matrixmult(Y_inv, Y)
+M = matrixmult(Y_tr, Y)
 
 def matrixdiv (M):
     for i in range(len(M)):
@@ -76,11 +76,12 @@ evecs = evecs[:,idx]
 
 # extract the 2 dominant eigenvectors
 r = 2
-V_r = evecs[:r,:]; print("V_r=",V_r) # get first r eigenvectors
+V_r = evecs[:r,:]
+# print("V_r=",V_r) # get first r eigenvectors
 
-x = matrixmult(V_r,Y_inv)
+x = matrixmult(V_r,Y_tr)
 
-res = np.linalg.pinv(x)
+res = np.transpose(x)
 
 # # save output in comma separated filename.txt. filename depends on the program
 np.savetxt(sys.argv[4], res, delimiter=',')

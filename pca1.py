@@ -15,11 +15,11 @@ if len(sys.argv) != 5 :
 # Compute the projections of Xt on v1,v2 for the matrix D of size nx2
 
 first = sys.argv[1]
-second = sys.argv[2]
+# second = sys.argv[2]
 
 DATA = np.genfromtxt(first, delimiter=',', autostrip=True) # strip spaces
 
-LABLE = np.genfromtxt(second, delimiter=',', autostrip=True) # strip spaces
+# LABLE = np.genfromtxt(second, delimiter=',', autostrip=True) # strip spaces
 # print("LABLE=", LABLE)
 
 
@@ -27,19 +27,20 @@ LABLE = np.genfromtxt(second, delimiter=',', autostrip=True) # strip spaces
 # C = U S Vt
 U,s,Vt = np.linalg.svd(DATA)
 # print("U=", U, "\n s=", s, "\n Vt=",Vt)
-print("Vt=",Vt)
+# print("Vt=",Vt)
 
 # matrix inverse and pseudo inverse
-A_inv = np.linalg.inv(Vt)
+A_tr = np.transpose(Vt)
 # print("A_inv=", A_inv, "\nA_pinv=",A_pinv)
 
 
 # extract the 2 dominant eigenvectors
 r = 2
-V_r = A_inv[:r,:]; print("V_r=",V_r) # get first r eigenvectors
+V_r = A_tr[:r,:]
+# print("V_r=",V_r) # get first r eigenvectors
 
-DATA_inv = np.linalg.pinv(DATA)
-# print(DATA_inv)
+DATA_tr = np.transpose(DATA)
+# print('DATA', DATA, '\n' 'DATA-INV', DATA_tr)
 
 def matrixmult (A, B):
     C = [[0 for row in range(len(B[0]))] for col in range(len(A))]
@@ -49,13 +50,13 @@ def matrixmult (A, B):
                 C[i][j] += A[i][k]*B[k][j]
     return C
 
-x = matrixmult(V_r,DATA_inv)
+x = matrixmult(V_r,DATA_tr)
 
-res = np.linalg.pinv(x)
+res = np.transpose(x)
 
-Vt = np.matrix('1 0 0 0 0 0; 0 1 0 0 0 0')
-D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
-D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
+# Vt = np.matrix('1 0 0 0 0 0; 0 1 0 0 0 0')
+# D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
+# D = np.matrix('1 1; 2 2; 3 3; 4 4; 5 0')
 
 # save output in comma separated filename.txt. filename depends on the program
 np.savetxt(sys.argv[4], res, delimiter=',')
