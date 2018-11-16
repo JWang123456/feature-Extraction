@@ -20,80 +20,111 @@ reduced_data_file = sys.argv[1]
 vector_file = sys.argv[2]
 labels_file = sys.argv[3]
 queried_point_file = sys.argv[4]
-label = int(sys.argv[5])
+label = sys.argv[5]
 output_file = sys.argv[6]
 
-if label == -1:
-    reduced_data_file = 'reducedim1_' + reduced_data_file
-    vector_file = 'reducedim1_' + vector_file
-    #print("ii")
-    #output_file = 'case1_' + output_file
-else:
-    reduced_data_file = 'reducedim2_' + reduced_data_file
-    vector_file = 'reducedim2_' + vector_file
-    #print("oo")
-    #output_file = 'case2_' + output_file
+# print(label)
 
-with open(reduced_data_file,"r") as filestream:
-	reduced_data = np.loadtxt(filestream, delimiter=',')
-#n,m = reduced_data.shape
+with open(label,"r") as filestream:
+	queried_label = np.loadtxt(filestream, delimiter=',')
 
-with open(vector_file,"r") as filestream:
-	reduced_vector = np.loadtxt(filestream, delimiter=',')
+print(queried_label)
 
-# print(reduced_vector)
-with open(labels_file,"r") as filestream:
-	labels = np.loadtxt(filestream, delimiter=',')
-unique_labels, counts_labels = np.unique(labels, return_counts=True)
-#print(unique_labels)
+nn_index = []
+for label in queried_label:
+	nn_index.append(-111111111) #separate different labels
+	reduced_data_file = 'reduced_data_file'
+	vector_file = 'vector_file'
 
-with open(queried_point_file,"r") as filestream:
-	queried_point = np.loadtxt(filestream, delimiter=',')
-
-print("queried_point", queried_point)
-print("reduced_vector", reduced_vector.T)
-reduced_queried_point = np.dot(queried_point, reduced_vector.T)
-
-# print(reduced_queried_point)
-#print(reduced_data[0])
-distance = sys.maxsize
-#print(distance)
-
-index = []
-# print(index)
-
-for i, data in enumerate(reduced_data):
 	if label == -1:
-		d = np.square(data[0] - reduced_queried_point[0]) + np.square(data[1] - reduced_queried_point[1])
-		if d == distance:
-			index.append(i)
-		if d < distance:
-			index = []
-			index.append(i)
-			distance = d
-			#print(index)
-			#print(distance)
-			#print(type(label))
-			#print(type(labels[i]))
-			#print(label == labels[i])
+		reduced_data_file = 'reducedim1_' + reduced_data_file
+		vector_file = 'reducedim1_' + vector_file
+		#print("ii")
+		#output_file = 'case1_' + output_file
 	else:
-		if label == labels[i]:
-			d = np.square(data[0] - reduced_queried_point[0]) + np.square(data[1] - reduced_queried_point[1])
-			#print(data)
-			#print(reduced_queried_point)
-			#print(d)
-			if d == distance:
-				index.append(i)
-			if d < distance:
-				index = []
-				index.append(i)
-				distance = d
-				#print(index)
-				#print(distance)
+		reduced_data_file = 'reducedim2_' + reduced_data_file
+		vector_file = 'reducedim2_' + vector_file
+		#print("oo")
+		#output_file = 'case2_' + output_file
 
-# print(index)
+	with open(reduced_data_file,"r") as filestream:
+		reduced_data = np.loadtxt(filestream, delimiter=',')
+	#n,m = reduced_data.shape
 
-np.savetxt(output_file, index, fmt='%d', delimiter=',')
+	with open(vector_file,"r") as filestream:
+		reduced_vector = np.loadtxt(filestream, delimiter=',')
+
+	# print(reduced_vector)
+	with open(labels_file,"r") as filestream:
+		labels = np.loadtxt(filestream, delimiter=',')
+	unique_labels, counts_labels = np.unique(labels, return_counts=True)
+	#print(unique_labels)
+	# print(labels)
+
+	with open(queried_point_file,"r") as filestream:
+		queried_point = np.loadtxt(filestream, delimiter=',')
+
+	# print("queried_point", queried_point)
+	# print("reduced_vector", reduced_vector.T)
+	reduced_queried_point = np.dot(queried_point, reduced_vector.T)
+
+	# print('reduced_queried_point', reduced_queried_point)
+	# print('reduced_queried_point0', reduced_queried_point[0])
+	# print('reduced_queried_point1', reduced_queried_point[1])
+	# print('reduced_data', reduced_data)
+	# print('reduced_data0', reduced_data[0])
+	# print('reduced_data1', reduced_data[1])
+
+	distance = sys.maxsize
+	#print(distance)
+
+	index = []
+	
+	# print(index)
+	for j, reduced_queried_point in enumerate(reduced_queried_point):
+		
+		for i in index:
+			nn_index.append(i)
+		
+		for i, data in enumerate(reduced_data):
+			if label == -1:
+				# print(np.square(data[0] - reduced_queried_point[0]))
+				# print(data[0])
+				# print('------')
+				d = np.square(data[0] - reduced_queried_point[0]) + np.square(data[1] - reduced_queried_point[1])
+				# print(d)
+				if d == distance:
+					index.append(i)
+					
+				if d < distance:
+					index = []
+					index.append(i)
+					
+					distance = d
+					#print(index)
+					#print(distance)
+					#print(type(label))
+					#print(type(labels[i]))
+					#print(label == labels[i])
+			else:
+				if label == labels[i]:
+					d = np.square(data[0] - reduced_queried_point[0]) + np.square(data[1] - reduced_queried_point[1])
+					#print(data)
+					#print(reduced_queried_point)
+					#print(d)
+					if d == distance:
+						index.append(i)
+					if d < distance:
+						index = []
+						index.append(i)
+						distance = d
+						#print(index)
+						#print(distance)
+		
+		nn_index.append(-1111) #separate different queried point
+	
+
+np.savetxt(output_file, nn_index, fmt='%d', delimiter=',')
 
 #print(index)
 #print(distance)
